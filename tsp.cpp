@@ -2,11 +2,11 @@
 
 using namespace std;
 
-double cooling_factor = 0.999 , start_temp= 1e+10, end_temp=0.1 ;
+long double cooling_factor = 0.9999 , start_temp= 1e+30, end_temp=0.1 ;
 
-double costfunc( vector<int> path_traverse , double **node_distance, double costprev);
+long double costfunc( vector<int> &vbes , long double **node_distance, long double costprev);
 
-double annealing(vector<int> path_traverse , double **node_distance, double total_dis);
+long double annealing(vector<int> &path_traverse , long double **node_distance, long double total_dis);
 
 int main(int argc, char const *argv[])
 {
@@ -20,14 +20,14 @@ int main(int argc, char const *argv[])
 
 	cin>>noofcities;
 
-	double **coordinates = new double*[noofcities];
+	long double **coordinates = new long double*[noofcities];
 
 	for ( i = 0; i < noofcities; ++i)
 	{
-	  	coordinates[i]=new double[2];
+	  	coordinates[i]=new long double[2];
 	}  
 
-	double x,y;
+	long double x,y;
 
 	for (i = 0; i < noofcities; ++i)
 	{
@@ -36,11 +36,11 @@ int main(int argc, char const *argv[])
 		coordinates[i][1]=y;
 	}
 
-	double **node_distance = new double*[noofcities];
+	long double **node_distance = new long double*[noofcities];
 
 	for ( i = 0; i < noofcities; ++i)
 	{
-	  	node_distance[i]=new double[noofcities];
+	  	node_distance[i]=new long double[noofcities];
 	}
 
 	for (i = 0; i < noofcities; ++i)
@@ -53,16 +53,30 @@ int main(int argc, char const *argv[])
 	}
 
 
-	vector<int> path_traverse(noofcities); 
+	vector<int> path_traverse(noofcities);
+	vector<int> path_traverse2(noofcities); 
 
 	for (i = 0; i < noofcities; ++i)
 	{
 		path_traverse[i] = i;
 	}
 
+	cout<<"\n\n\nPath it will Follow\n";
+	for (int i = 0; i < noofcities; ++i)
+	{
+		cout<<path_traverse[i]<<"\t";
+	}
+
+	srand (time(NULL));
 	random_shuffle( path_traverse.begin(), path_traverse.end() );
 
-	double total_dis=0 , mindis=0;
+	cout<<"\n\n\nPath it will Follow\n";
+	for (int i = 0; i < noofcities; ++i)
+	{
+		cout<<path_traverse[i]<<"\t";
+	}
+
+	long double total_dis=0 , mindis=0;
 
 	int x1,y1;
 
@@ -73,15 +87,87 @@ int main(int argc, char const *argv[])
 		total_dis+=node_distance[x1][y1];
 	}
 
-	cout<<total_dis;
+	cout<<"initial :: "<<total_dis;
 
-	mindis = annealing(path_traverse,node_distance,total_dis);
+	// int x2,y2,cities=(path_traverse).size();
+
+	// long double costnew=0, costans=0;
+
+	// x2=rand()%cities;
+	// srand (time(NULL));
+	// y2=rand()%cities;
+	// srand (1);
+	// while(x2==y2)
+	// {
+	// 	y2=rand()%cities;
+	// }
+
+	// cout<<"\ncoordinates :: "<<x2<<"\t"<<y2<<endl;
+
+	// cout<<node_distance[path_traverse[x2-1]][path_traverse[x2]]<<"\t"<< node_distance[path_traverse[x2]][path_traverse[x2+1]]<<"\t"<<node_distance[path_traverse[y2-1]][path_traverse[y2]]<<"\t"<<node_distance[path_traverse[y2]][path_traverse[y2+1]];
+
+
+	// costnew = total_dis - node_distance[path_traverse[x2-1]][path_traverse[x2]] - node_distance[path_traverse[x2]][path_traverse[x2+1]] - node_distance[path_traverse[y2-1]][path_traverse[y2]] - node_distance[path_traverse[y2]][path_traverse[y2+1]];
+
+	// cout <<"prev cost \t"<<costnew<<endl;
+
+	// int temp;
+
+	// temp =  path_traverse[x2];
+	// path_traverse[x2]=path_traverse[y2];
+	// path_traverse[y2]=temp;
+
+	// cout<<"\n\n\nPath it will Follow\n";
+	// for (int i = 0; i < noofcities; ++i)
+	// {
+	// 	cout<<path_traverse[i]<<"\t";
+	// }
+	// cout<<endl;
+
+	// cout<<path_traverse[x2-1]<<"\t"<<path_traverse[x2]<<endl;
+
+	// costans = costnew + node_distance[path_traverse[x2-1]][path_traverse[x2]] + node_distance[path_traverse[x2]][path_traverse[x2+1]] + node_distance[path_traverse[y2-1]][path_traverse[y2]] + node_distance[path_traverse[y2]][path_traverse[y2+1]];
+	
+	// cout<<endl<<node_distance[path_traverse[x2-1]][path_traverse[x2]]<<"\t"<< node_distance[path_traverse[x2]][path_traverse[x2+1]]<<"\t"<<node_distance[path_traverse[y2-1]][path_traverse[y2]]<<"\t"<<node_distance[path_traverse[y2]][path_traverse[y2+1]];
+
+	// cout <<"\nafter cost \t"<<costans<<endl;
+
+	mindis=total_dis;
+	for (int i = 0; i < 10000 ; ++i)
+	{
+		mindis = annealing(path_traverse,node_distance,mindis);
+
+		
+		if (total_dis > mindis && mindis >0)
+		{
+			total_dis=mindis;
+			path_traverse2=path_traverse;
+		}
+		cout<<"\n\n\nPath it will Follow\n";
+		for (int i = 0; i < noofcities; ++i)
+		{
+			cout<<path_traverse2[i]<<"\t";
+		}
+		cout<<"\n\n\n\nDistace Travelled\n";
+		cout<<total_dis<<endl;
+	}
+	
+
 
 	cout<<"\n\n\nPath it will Follow\n";
 	for (int i = 0; i < noofcities; ++i)
 	{
 		cout<<path_traverse[i]<<"\t";
 	}
+	total_dis=0;
+	for (int i = 0; i < noofcities-1 ; ++i)
+	{
+		x1=path_traverse[i];
+		y1=path_traverse[i+1];
+		total_dis+=node_distance[x1][y1];
+	}
+
+	cout<<"\nCalculated\n"<<total_dis;
 	
 	cout<<"\n\n\n\nDistace Travelled\n";
 	cout<<mindis<<endl;
@@ -90,68 +176,101 @@ int main(int argc, char const *argv[])
 }
 
 
-double annealing(vector<int> path_traverse , double **node_distance, double total_dis)
+long double annealing(vector<int> &path_traverse , long double **node_distance, long double total_dis)
 {
-	double costprev = total_dis;
-	double costbest = total_dis;
-	double temp=start_temp, costnew,diff;
-
-	vector<int> v = path_traverse;
-	vector<int> vbes = path_traverse;
+	long double costprev = total_dis;
+	long double costbest = total_dis;
+	long double temp=start_temp, costnew,diff;
+	int cities=cities=(path_traverse).size();
+	vector<int> v(path_traverse);
+	vector<int> vbes(path_traverse);
 
 	while ( temp > end_temp )
 	{
-		costnew = costfunc(path_traverse , node_distance ,costprev);
+		costnew = costfunc(vbes , node_distance ,costprev);
 		diff=costnew - costprev;
-		if ( diff < 0 || exp(-diff/temp) > ((rand()%10000)/100000.0 ))
+		if ( (diff < 0) || ((exp(-diff/temp)) > ((rand()%10000)/10000.0 )))
 		{
 			costprev=costnew;	
 		}
 
-		if (costbest > costnew )
+		if (costbest > costprev )
 		{
-			costbest = costnew;
-			vbes = path_traverse;
+			costbest = costprev;
+			for (int i = 0; i < cities; ++i)
+			{
+				path_traverse[i]=vbes[i];
+			}
+			
 		}
 
-		cout <<"costerfds "<< costprev<<endl;
+		//cout <<"costerfds "<< costprev<<endl;
 
 		temp*=cooling_factor;
-	} 
+	}
 
-
-
-	path_traverse = vbes;
+	// cout<<"\nvbes";
+	// cout<<endl<<endl;
+	// for (int i = 0; i < cities; ++i)
+	// {
+	// 	cout<<path_traverse[i]<<"\t";
+	// }
+	// cout<<endl;
 	return costbest;
 
 }
 
-double costfunc( vector<int> path_traverse , double **node_distance, double costprev)
+long double costfunc( vector<int> &vbes , long double **node_distance, long double costprev)
 {
-	int x,y,cities=(path_traverse).size();
+	int x,y,cities=(vbes).size();
 
-	double costnew;
+	long double costnew=0, costans=0;
 
+	srand (time(NULL));
 	x=rand()%cities;
+	srand (1);
 	y=rand()%cities;
 	while(x==y)
 	{
 		y=rand()%cities;
+		srand (1);
 	}
 
-	costnew = costprev - node_distance[path_traverse[x-1]][path_traverse[x]] - node_distance[path_traverse[x]][path_traverse[x+1]] - node_distance[path_traverse[y-1]][path_traverse[y]] - node_distance[path_traverse[y]][path_traverse[y+1]];
+	costnew = costprev - node_distance[vbes[x-1]][vbes[x]] - node_distance[vbes[x]][vbes[x+1]] - node_distance[vbes[y-1]][vbes[y]] - node_distance[vbes[y]][vbes[y+1]];
 
-	cout <<"prev cost \t"<<costnew<<endl;
+	//cout <<"prev cost \t"<<costnew<<endl;
 
 	int temp;
 
-	temp =  path_traverse[x];
-	path_traverse[x]=path_traverse[y];
-	path_traverse[y]=temp;
+	temp =  vbes[x];
+	vbes[x]=vbes[y];
+	vbes[y]=temp;
 
-	costnew+=node_distance[path_traverse[x-1]][path_traverse[x]] + node_distance[path_traverse[x]][path_traverse[x+1]] + node_distance[path_traverse[y-1]][path_traverse[y]] + node_distance[path_traverse[y]][path_traverse[y+1]];
+	costans = costnew + node_distance[vbes[x-1]][vbes[x]] + node_distance[vbes[x]][vbes[x+1]] + node_distance[vbes[y-1]][vbes[y]] + node_distance[vbes[y]][vbes[y+1]];
 	
-	cout <<"after cost \t"<<costnew<<endl;
+	costans=0;
+	int x1,y1;
+	for (int i = 0; i < cities-1 ; ++i)
+	{
+		x1=vbes[i];
+		y1=vbes[i+1];
+		costans+=node_distance[x1][y1];
+	}
+	
+	// srand (time(NULL));
+	// random_shuffle( vbes.begin(), vbes.end() );
+	// int x1,y1;
 
-	return costnew;
+	// for (int i = 0; i < cities-1 ; ++i)
+	// {
+	// 	x1=vbes[i];
+	// 	y1=vbes[i+1];
+	// 	costans+=node_distance[x1][y1];
+	// }
+
+
+
+	//cout <<"after cost \t"<<costans<<endl;
+
+	return costans;
 }
