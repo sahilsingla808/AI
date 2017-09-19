@@ -236,17 +236,19 @@ long double costfunc( vector<int> &vbes , long double **node_distance, long doub
 		srand (1);
 	}
 
-	costnew = costprev - node_distance[vbes[x-1]][vbes[x]] - node_distance[vbes[x]][vbes[x+1]] - node_distance[vbes[y-1]][vbes[y]] - node_distance[vbes[y]][vbes[y+1]];
+	// costnew = costprev - node_distance[vbes[x-1]][vbes[x]] - node_distance[vbes[x]][vbes[x+1]] - node_distance[vbes[y-1]][vbes[y]] - node_distance[vbes[y]][vbes[y+1]];
 
 	//cout <<"prev cost \t"<<costnew<<endl;
 
 	int temp;
 
-	temp =  vbes[x];
-	vbes[x]=vbes[y];
-	vbes[y]=temp;
+	reverse(vbes.begin()+x,vbes.begin()+y);
 
-	costans = costnew + node_distance[vbes[x-1]][vbes[x]] + node_distance[vbes[x]][vbes[x+1]] + node_distance[vbes[y-1]][vbes[y]] + node_distance[vbes[y]][vbes[y+1]];
+	// temp =  vbes[x];
+	// vbes[x]=vbes[y];
+	// vbes[y]=temp;
+
+	// costans = costnew + node_distance[vbes[x-1]][vbes[x]] + node_distance[vbes[x]][vbes[x+1]] + node_distance[vbes[y-1]][vbes[y]] + node_distance[vbes[y]][vbes[y+1]];
 	
 	costans=0;
 	int x1,y1;
@@ -256,17 +258,21 @@ long double costfunc( vector<int> &vbes , long double **node_distance, long doub
 		y1=vbes[i+1];
 		costans+=node_distance[x1][y1];
 	}
-	
-	// srand (time(NULL));
-	// random_shuffle( vbes.begin(), vbes.end() );
-	// int x1,y1;
 
+	// costans=0;
+	
 	// for (int i = 0; i < cities-1 ; ++i)
 	// {
 	// 	x1=vbes[i];
 	// 	y1=vbes[i+1];
 	// 	costans+=node_distance[x1][y1];
 	// }
+	
+	// srand (time(NULL));
+	// random_shuffle( vbes.begin(), vbes.end() );
+	// int x1,y1;
+
+	
 
 
 
