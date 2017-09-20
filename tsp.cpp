@@ -189,9 +189,20 @@ long double annealing(vector<int> &path_traverse , long double **node_distance, 
 	{
 		costnew = costfunc(vbes , node_distance ,costprev);
 		diff=costnew - costprev;
-		if ( (diff < 0) || ((exp(-diff/temp)) > ((rand()%10000)/10000.0 )))
+		if ( (diff < 0) || (1/(1+exp(-diff/temp)) > ((rand()%10000)/10000.0 )))
 		{
-			costprev=costnew;	
+			costprev=costnew;
+			for (int i = 0; i < cities; ++i)
+			{
+				v[i]=vbes[i];
+			}	
+		}
+		else
+		{
+			for (int i = 0; i < cities; ++i)
+			{
+				vbes[i]=v[i];
+			}
 		}
 
 		if (costbest > costprev )
@@ -230,7 +241,7 @@ long double costfunc( vector<int> &vbes , long double **node_distance, long doub
 	x=rand()%cities;
 	srand (1);
 	y=rand()%cities;
-	while(x==y)
+	while(x==y )
 	{
 		y=rand()%cities;
 		srand (1);
